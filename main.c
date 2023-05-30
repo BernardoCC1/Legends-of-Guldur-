@@ -118,7 +118,7 @@ int main() {
           if (inimigoAtual->hp <= 0) {
             // eu sou o monstro de C
             ids[numInimigosBatalhados] = inimigoAtual->id;
-            strcpy(inimigosBatalhados[ids[numInimigosBatalhados]],
+            strcpy(inimigosBatalhados[ids[numInimigosBatalhados] - 1],
                    inimigoAtual->nome);
             numInimigosBatalhados++;
             removerI(&headI, inimigoAtual->id);
