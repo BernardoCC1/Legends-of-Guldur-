@@ -53,15 +53,39 @@ void imprimirH(personagem *head) {
   }
 }
 
-void imprimirI(inimigo *headI) {
-  inimigo *tempI = headI;
-  while (tempI != NULL) {
-    printf("Inimigo: %s (HP: %d, Ataque: %d, Poder Mágico: %d, ID: %d)\n",
-           tempI->nome, tempI->hp, tempI->ataque, tempI->pm, tempI->id);
-    tempI = tempI->proxI;
+personagem *escolherPersonagem(int escolha, personagem *head) {
+  personagem *personagemAtual = NULL;
+  switch (escolha) {
+  case 1:
+    personagemAtual = (personagem *)malloc(sizeof(personagem));
+    strcpy(personagemAtual->nome, head->nome);
+    personagemAtual->hp = head->hp;
+    personagemAtual->ataque = head->ataque;
+    personagemAtual->pm = head->pm;
+    personagemAtual->prox = NULL;
+    break;
+  case 2:
+    personagemAtual = (personagem *)malloc(sizeof(personagem));
+    strcpy(personagemAtual->nome, head->prox->nome);
+    personagemAtual->hp = head->prox->hp;
+    personagemAtual->ataque = head->prox->ataque;
+    personagemAtual->pm = head->prox->pm;
+    personagemAtual->prox = NULL;
+    break;
+  case 3:
+    personagemAtual = (personagem *)malloc(sizeof(personagem));
+    strcpy(personagemAtual->nome, head->prox->prox->nome);
+    personagemAtual->hp = head->prox->prox->hp;
+    personagemAtual->ataque = head->prox->prox->ataque;
+    personagemAtual->pm = head->prox->prox->pm;
+    personagemAtual->prox = NULL;
+    break;
+  default:
+    printf("Escolha inválida. Personagem não definido.\n");
   }
-}
 
+  return personagemAtual;
+}
 void ataque(personagem *personagemAtual, inimigo *inimigoAtual) {
   if (inimigoAtual == NULL) {
     printf("Erro ao escolher o inimigo\n");
@@ -133,36 +157,12 @@ void defesa(personagem *personagemAtual, inimigo *inimigoAtual) {
   }
   int dano = danoI / 2;
 
-  printf("Você se defendeu do ataque do inimigo %s!\n", inimigoAtual->nome);
+  printf("\nVocê se defendeu do ataque do inimigo %s!\n", inimigoAtual->nome);
   printf("Dano recebido: %d\n", dano);
 
   personagemAtual->hp -= dano;
 
   printf("Sua vida restante: %d\n", personagemAtual->hp);
-}
-
-void removerP(personagem **head, char nome[50]) {
-  personagem *temp = *head;
-  personagem *anterior = NULL;
-
-  if (temp != NULL && strcmp(temp->nome, nome) == 0) {
-    *head = temp->prox;
-    free(temp);
-    return;
-  }
-
-  while (temp != NULL && strcmp(temp->nome, nome) != 0) {
-    anterior = temp;
-    temp = temp->prox;
-  }
-
-  if (temp == NULL) {
-    printf("Personagem não encontrado\n");
-    return;
-  }
-
-  anterior->prox = temp->prox;
-  free(temp);
 }
 
 void removerI(inimigo **headI, int id) {
@@ -187,40 +187,6 @@ void removerI(inimigo **headI, int id) {
 
   anteriorI->proxI = tempI->proxI;
   free(tempI);
-}
-
-personagem *escolherPersonagem(int escolha, personagem *head) {
-  personagem *personagemAtual = NULL;
-  switch (escolha) {
-  case 1:
-    personagemAtual = (personagem *)malloc(sizeof(personagem));
-    strcpy(personagemAtual->nome, head->nome);
-    personagemAtual->hp = head->hp;
-    personagemAtual->ataque = head->hp;
-    personagemAtual->pm = head->hp;
-    personagemAtual->prox = NULL;
-    break;
-  case 2:
-    personagemAtual = (personagem *)malloc(sizeof(personagem));
-    strcpy(personagemAtual->nome, head->prox->nome);
-    personagemAtual->hp = head->prox->hp;
-    personagemAtual->ataque = head->prox->ataque;
-    personagemAtual->pm = head->prox->pm;
-    personagemAtual->prox = NULL;
-    break;
-  case 3:
-    personagemAtual = (personagem *)malloc(sizeof(personagem));
-    strcpy(personagemAtual->nome, head->prox->prox->nome);
-    personagemAtual->hp = head->prox->prox->hp;
-    personagemAtual->ataque = head->prox->prox->ataque;
-    personagemAtual->pm = head->prox->prox->pm;
-    personagemAtual->prox = NULL;
-    break;
-  default:
-    printf("Escolha inválida. Personagem não definido.\n");
-  }
-
-  return personagemAtual;
 }
 
 void insertionSort(int arr[], int n) {
